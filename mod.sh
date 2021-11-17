@@ -45,12 +45,16 @@ sed -i '/\"NAS\"/d' package/lean/luci-app-zerotier/luasrc/controller/zerotier.lu
 sed -i 's/\"vpn\"/\"services\"/g' package/lean/luci-app-zerotier/luasrc/controller/zerotier.lua
 #
 # > 修改插件名字
-sed -i 's/\"CPU 使用率（%）\"/\"CPU负载\"/g' feeds/luci/modules/luci-base/po/zh-cn/base.po
-sed -i 's/\"Docker CE 容器\"/\"DockerCE\"/g' package/lean/luci-app-docker/po/zh-cn/docker.po
-sed -i 's/\"DDNS.to内网穿透\"/\"内网穿透\"/g' feeds/nas_luci/luci/luci-app-ddnsto/po/zh-cn/ddnsto.po
-sed -i 's/\"GodProxy 滤广告\"/\"广告过滤\"/g' package/community/luci-app-godproxy/po/zh-cn/koolproxy.po
-sed -i 's/\"TTYD 终端\"/\"网页终端\"/g' package/lean/luci-app-ttyd/po/zh-cn/terminal.po
-sed -i 's/\"Argon 主题设置\"/\"主题设置\"/g' package/community/luci-app-argon-config/po/zh-cn/argon-config.po
-sed -i 's/\"解锁网易云灰色歌曲\"/\"音乐解锁\"/g' package/lean/luci-app-unblockmusic/po/zh-cn/unblockmusic.po
-sed -i 's/\"Turbo ACC 网络加速\"/\"网络加速\"/g' package/lean/luci-app-turboacc/po/zh-cn/turboacc.po
+sed -i 's/"aMule设置"/"电驴下载"/g' `grep "aMule设置" -rl ./`
+sed -i 's/"Argon 主题设置"/"主题设置"/g' `grep "Argon 主题设置" -rl ./`
+sed -i 's/"CPU 使用率（%）"/"CPU负载"/g' `grep "CPU 使用率（%）" -rl ./`
+sed -i 's/"DDNS.to内网穿透"/"内网穿透"/g' `grep "DDNS.to内网穿透" -rl ./`
+sed -i 's/"Docker CE 容器"/"DockerCE"/g' `grep "Docker CE 容器" -rl ./`
+sed -i 's/"GodProxy 滤广告"/"广告过滤"/g' `grep "GodProxy 滤广告" -rl ./`
+sed -i 's/"TTYD 终端"/"网页终端"/g' `grep "TTYD 终端" -rl ./`
+sed -i 's/"Turbo ACC 网络加速"/"网络加速"/g' `grep "Turbo ACC 网络加速" -rl ./`
+sed -i 's/"USB 打印服务器"/"打印服务"/g' `grep "USB 打印服务器" -rl ./`
+sed -i 's/"带宽监控"/"监控"/g' `grep "带宽监控" -rl ./`
+sed -i 's/"解锁网易云灰色歌曲"/"音乐解锁"/g' `grep "解锁网易云灰色歌曲" -rl ./`
+sed -i 's/"实时流量监测"/"流量"/g' `grep "实时流量监测" -rl ./`
 #
