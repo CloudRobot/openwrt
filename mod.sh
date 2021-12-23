@@ -19,8 +19,8 @@ sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/M
 git clone https://github.com/lisaac/luci-lib-docker package/community/luci-lib-docker
 git clone https://github.com/lisaac/luci-app-dockerman package/community/luci-app-dockerman
 #
-# > Godproxy
-git clone https://github.com/project-lede/luci-app-godproxy package/community/luci-app-godproxy
+# > iKoolProxy
+git clone https://github.com/iwrt/luci-app-ikoolproxy package/community/luci-app-ikoolproxy
 #
 # > HelloWorld (vssr)
 git clone https://github.com/jerrykuku/lua-maxminddb package/community/lua-maxminddb
@@ -50,7 +50,7 @@ sed -i 's/"Argon 主题设置"/"主题设置"/g' `grep "Argon 主题设置" -rl 
 sed -i 's/"CPU 使用率（%）"/"CPU负载"/g' `grep "CPU 使用率（%）" -rl ./`
 sed -i 's/"DDNS.to内网穿透"/"内网穿透"/g' `grep "DDNS.to内网穿透" -rl ./`
 sed -i 's/"Docker CE 容器"/"DockerCE"/g' `grep "Docker CE 容器" -rl ./`
-sed -i 's/"GodProxy 滤广告"/"广告过滤"/g' `grep "GodProxy 滤广告" -rl ./`
+sed -i 's/"iKoolProxy 滤广告"/"广告过滤"/g' `grep "iKoolProxy 滤广告" -rl ./`
 sed -i 's/"TTYD 终端"/"网页终端"/g' `grep "TTYD 终端" -rl ./`
 sed -i 's/"Turbo ACC 网络加速"/"网络加速"/g' `grep "Turbo ACC 网络加速" -rl ./`
 sed -i 's/"USB 打印服务器"/"打印服务"/g' `grep "USB 打印服务器" -rl ./`
