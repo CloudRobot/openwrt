@@ -8,26 +8,18 @@ name: Build DockerImage
 on:
   workflow_dispatch:
     inputs:
-      url:
-        description: 'Firmware download url'
+      version:
+        description: 'Firmware Version'
         required: true
         default: ''
-      dir:
-        description: 'Dockerfile directory'
-        required: true
-        default: 'docker'
       img:
         description: 'DockerImage Name'
         required: true
         default: 'openwrt'
-      tag:
-        description: 'DockerImage TagName'
-        required: true
-        default: 'latest'
       platform:
         description: 'DockerImage Platform'
         required: true
-        default: 'linux/arm64'
+        default: 'linux/arm,linux/arm64'
 
 jobs:
   build:
@@ -40,8 +32,9 @@ jobs:
 
       - name: Download target firmware
         run: |
-          cd ${{ github.event.inputs.dir }}
-          wget ${{ github.event.inputs.url }} -O rootfs.tar.gz
+          cd docker
+          wget -nv https://github.com/xtoys/openwrt/releases/download/${{ github.event.inputs.version }}-lean/openwrt-at91-sama5-microchip_sama5d3-xplained-rootfs.tar.gz -O arm.rootfs.tar.gz
+          wget -nv https://github.com/xtoys/openwrt/releases/download/${{ github.event.inputs.version }}-lean/openwrt-armvirt-64-default-rootfs.tar.gz -O arm64.rootfs.tar.gz
 
       - name: Setup QEMU Simulator
         id: qemu
@@ -64,8 +57,9 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: ${{ github.event.inputs.dir }}
+          context: docker
           platforms: ${{ github.event.inputs.platform }}
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/${{ github.event.inputs.img }}:${{ github.event.inputs.tag }}
+            ${{ secrets.DOCKER_USERNAME }}/${{ github.event.inputs.img }}:${{ github.event.inputs.version }}
+            ${{ secrets.DOCKER_USERNAME }}/${{ github.event.inputs.img }}:latest
