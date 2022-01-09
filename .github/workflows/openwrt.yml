@@ -135,7 +135,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
         with:
-          tag_name: ${{ github.event.inputs.tag }}-lean
+          tag_name: ${{ github.event.inputs.tag }}-Lean
           body_path: $GITHUB_WORKSPACE/$RELEASE_INFO
           files: ${{ env.FIRMWARE }}/*
 
