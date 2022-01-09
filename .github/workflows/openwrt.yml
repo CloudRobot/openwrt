@@ -14,30 +14,14 @@ on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
-      # ssh:
-      #   description: 'SSH connection to Actions'
-      #   required: false
-      #   default: 'false'
+      tag:
+        description: 'Generate release tag'
+        required: true
+        default: ''
       arch:
         description: 'Load config configuration'
         required: true
-        default: 'AMD64'
-      feeds:
-        description: 'Load feeds configuration'
-        required: true
-        default: 'feeds.sh'
-      mod:
-        description: 'Load custom configuration'
-        required: true
-        default: 'mod.sh'
-      info:
-        description: 'Generate release info'
-        required: true
-        default: 'release.txt'
-      release:
-        description: 'Upload to Github Release'
-        required: true
-        default: 'true'
+        default: 'arm64'
 
 env:
   TZ: Asia/Shanghai
@@ -46,10 +30,10 @@ env:
   UPLOAD_FIRMWARE: true
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: config/${{ github.event.inputs.arch }}.config
-  DIY_P1_SH: ${{ github.event.inputs.feeds }}
-  DIY_P2_SH: ${{ github.event.inputs.mod }}
-  RELEASE_INFO: config/${{ github.event.inputs.info }}
-  UPLOAD_RELEASE: ${{ github.event.inputs.release }}
+  DIY_P1_SH: feeds.sh
+  DIY_P2_SH: mod.sh
+  RELEASE_INFO: config/release.txt
+  UPLOAD_RELEASE: true
 
 jobs:
   build:
@@ -101,13 +85,6 @@ jobs:
           cd openwrt
           $GITHUB_WORKSPACE/$DIY_P2_SH
 
-      # - name: SSH connection to Actions
-      #   uses: P3TERX/ssh2actions@v1.0.0
-      #   if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-      #   env:
-      #     TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      #     TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-
       - name: Download package
         id: package
         run: |
@@ -124,9 +101,6 @@ jobs:
           echo -e "$(nproc) thread compile"
           make -j$(nproc) || make -j1 || make -j1 V=s
           echo "::set-output name=status::success"
-          grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
-          [ -s DEVICE_NAME ] && echo "DEVICE_NAME=.$(cat DEVICE_NAME)" >> $GITHUB_ENV
-          echo "FILE_DATE=.$(date +"%Y.%m.%d")" >> $GITHUB_ENV
 
       - name: Check space usage
         if: (!cancelled())
@@ -138,6 +112,7 @@ jobs:
         run: |
           cd openwrt/bin/targets/*/*
           find -name "*version.buildinfo*" | xargs -i rm -rf {}
+          find -name "*config.buildinfo*" | xargs -i rm -rf {}
           find -name "*feeds.buildinfo*" | xargs -i rm -rf {}
           find -name "*sha256sums*" | xargs -i rm -rf {}
           find -name "*manifest*" | xargs -i rm -rf {}
@@ -152,25 +127,16 @@ jobs:
         uses: actions/upload-artifact@main
         if: steps.organize.outputs.status == 'success' && !cancelled()
         with:
-          name: openwrt.firmware${{ env.FILE_DATE }}
+          name: openwrt.firmware.${{ github.event.inputs.arch }}
           path: ${{ env.FIRMWARE }}
-
-      - name: Generate release tag
-        id: tag
-        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-        run: |
-          echo "::set-output name=release_tag::R$(date +"%y.%m.%d")-${{ github.event.inputs.arch }}-Release"
-          [ -e $RELEASE_INFO ] && cat $RELEASE_INFO >> info.txt
-          echo "::set-output name=status::success"
 
       - name: Upload firmware to release
         uses: softprops/action-gh-release@v1
-        if: steps.tag.outputs.status == 'success' && !cancelled()
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
         with:
-          tag_name: ${{ steps.tag.outputs.release_tag }}
-          body_path: info.txt
+          tag_name: ${{ github.event.inputs.tag }}-lean
+          body_path: $GITHUB_WORKSPACE/$RELEASE_INFO
           files: ${{ env.FIRMWARE }}/*
 
       - name: Delete workflow runs
