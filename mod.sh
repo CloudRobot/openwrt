@@ -16,8 +16,8 @@ sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/M
 # 集成自定义插件
 #
 # > Dockerman
-git clone https://github.com/lisaac/luci-lib-docker package/community/luci-lib-docker
-git clone https://github.com/lisaac/luci-app-dockerman package/community/luci-app-dockerman
+# git clone https://github.com/lisaac/luci-lib-docker package/community/luci-lib-docker
+# git clone https://github.com/lisaac/luci-app-dockerman package/community/luci-app-dockerman
 #
 # > iKoolProxy
 git clone https://github.com/iwrt/luci-app-ikoolproxy package/community/luci-app-ikoolproxy
