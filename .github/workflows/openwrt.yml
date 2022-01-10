@@ -32,7 +32,6 @@ env:
   CONFIG_FILE: config/${{ github.event.inputs.arch }}.config
   DIY_P1_SH: feeds.sh
   DIY_P2_SH: mod.sh
-  RELEASE_INFO: config/release.txt
   UPLOAD_RELEASE: true
 
 jobs:
@@ -135,8 +134,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
         with:
-          tag_name: ${{ github.event.inputs.tag }}-lean
-          body_path: $GITHUB_WORKSPACE/$RELEASE_INFO
+          tag_name: ${{ github.event.inputs.tag }}-Lean
+          body_path: config/release.txt
           files: ${{ env.FIRMWARE }}/*
 
       - name: Delete workflow runs
