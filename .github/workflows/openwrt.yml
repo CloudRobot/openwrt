@@ -31,7 +31,7 @@ env:
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: config/${{ github.event.inputs.arch }}.config
   DIY_P1_SH: feeds.sh
-  #DIY_P2_SH: mod.sh
+  DIY_P2_SH: mod.sh
   UPLOAD_RELEASE: true
 
 jobs:
