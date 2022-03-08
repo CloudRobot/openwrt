@@ -96,7 +96,9 @@ jobs:
       - name: Compile the firmware
         id: compile
         run: |
-          cd openwrt          
+          cd openwrt
+          echo -e "$(nproc) thread compile"
+          make -j$(nproc) || make -j1 || make -j1 V=s
           make package/feeds/luci/luci-base/compile V=s
           make package/lean/luci-app-ssr-plus/compile -j1 V=s
           echo "::set-output name=status::success"
